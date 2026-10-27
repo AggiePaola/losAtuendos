@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Usuario - Los Atuendos</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #fafafa;
+    color: #212121;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    line-height: 1.6;
+  }
+  h1 {
+    color: #C85A00;
+    border-bottom: 3px solid #E66F00;
+    padding-bottom: 10px;
+  }
+  h2 {
+    color: #E66F00;
+    margin-top: 35px;
+    border-left: 4px solid #E66F00;
+    padding-left: 10px;
+  }
+  h3 {
+    color: #C85A00;
+    margin-top: 25px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+  }
+  th {
+    background: #E66F00;
+    color: white;
+    padding: 10px;
+    text-align: left;
+  }
+  td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+  }
+  tr:nth-child(even) { background: #FFF3E0; }
+  code {
+    background: #FFE0B2;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: Consolas, monospace;
+    font-size: 0.9em;
+  }
+  pre {
+    background: #263238;
+    color: #FFD54F;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+  }
+  .nota {
+    background: #FFF3E0;
+    border-left: 4px solid #E66F00;
+    padding: 12px 16px;
+    margin: 15px 0;
+    border-radius: 4px;
+  }
+  ul { padding-left: 20px; }
+  li { margin: 4px 0; }
+  .obligatorio { color: #C62828; font-weight: bold; }
+  .boton {
+    display: inline-block;
+    background: #E66F00;
+    color: white;
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<h1>Manual de Usuario - Los Atuendos</h1>
+<p>Sistema de administracion de alquiler de vestuario.</p>
+
+<h2>Requisitos</h2>
+<ul>
+  <li>Java 11 o superior</li>
+  <li>NetBeans (recomendado) o Maven desde consola</li>
+  <li>No requiere instalar un servidor de base de datos (H2 es embebida)</li>
+</ul>
+
+<h2>Como ejecutar</h2>
+
+<h3>Desde NetBeans</h3>
+<ol>
+  <li>Abrir el proyecto (Archivo &gt; Abrir proyecto)</li>
+  <li>Presionar <strong>F6</strong> o clic derecho sobre el proyecto &gt; Run</li>
+</ol>
+
+<h3>Desde consola (PowerShell)</h3>
+<pre><code># Compilar
+&amp; "C:\Program Files\NetBeans-14\netbeans\java\maven\bin\mvn.cmd" compile
+
+# Ejecutar
+$mvnRepo = "$env:USERPROFILE\.m2\repository"
+$h2jar = Get-ChildItem -Path "$mvnRepo\com\h2database\h2" -Filter "*.jar" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+java -cp "target\classes;$h2jar" com.mycompany.losatuendos.LosAtuendos</code></pre>
+
+<div class="nota">
+La base de datos se crea automaticamente en el primer arranque como archivo
+<code>losatuendos.mv.db</code> en la carpeta del proyecto.
+</div>
+
+<h2>Pantallas y operaciones</h2>
+<p>Al abrir la aplicacion veras el menu lateral naranja con cinco modulos:
+Clientes, Empleados, Prendas, Servicios y Lavanderia.</p>
+
+<h3>Clientes</h3>
+<p>Registra y consulta clientes del alquiler.</p>
+
+<p><strong>Formulario:</strong></p>
+<ul>
+  <li><span class="obligatorio">Documento</span> (obligatorio): numero de identificacion del cliente</li>
+  <li><span class="obligatorio">Nombres</span> (obligatorio)</li>
+  <li><span class="obligatorio">Apellidos</span> (obligatorio)</li>
+  <li><strong>Telefono</strong>: numero de contacto</li>
+  <li><strong>Direccion</strong>: direccion de residencia</li>
+</ul>
+
+<p><strong>Botones:</strong></p>
+<ul>
+  <li><span class="boton">Guardar</span>: valida los campos obligatorios y registra el cliente. Si el documento ya existe, muestra un error.</li>
+  <li><span class="boton">Limpiar</span>: vacia todos los campos del formulario.</li>
+</ul>
+
+<p><strong>Tabla:</strong> muestra todos los clientes registrados con su ID asignado por la base de datos.</p>
+
+<hr>
+
+<h3>Empleados</h3>
+<p>Registra y consulta empleados del negocio.</p>
+
+<p><strong>Formulario:</strong></p>
+<ul>
+  <li><span class="obligatorio">Documento</span> (obligatorio)</li>
+  <li><span class="obligatorio">Nombres</span> (obligatorio)</li>
+  <li><span class="obligatorio">Apellidos</span> (obligatorio)</li>
+  <li><strong>Cargo</strong>: rol del empleado (vendedor, administrador, etc.)</li>
+  <li><strong>Telefono</strong></li>
+</ul>
+
+<p><strong>Botones:</strong></p>
+<ul>
+  <li><span class="boton">Guardar</span>: valida y registra el empleado</li>
+  <li><span class="boton">Limpiar</span>: vacia el formulario</li>
+</ul>
+
+<p><strong>Tabla:</strong> muestra todos los empleados con su ID, cargo y telefono.</p>
+
+<hr>
+
+<h3>Prendas</h3>
+<p>Registra prendas de los tres tipos: vestidos, trajes y disfraces. Los campos especificos cambian segun el tipo seleccionado.</p>
+
+<p><strong>Campos comunes:</strong></p>
+<ul>
+  <li><strong>Tipo</strong> (lista desplegable): Vestido, Traje o Disfraz</li>
+  <li><span class="obligatorio">Codigo</span> (obligatorio): identificador unico de la prenda</li>
+  <li><span class="obligatorio">Nombre</span> (obligatorio)</li>
+  <li><strong>Descripcion</strong>: detalle de la prenda</li>
+</ul>
+
+<p><strong>Campos para Vestido:</strong></p>
+<ul>
+  <li><span class="obligatorio">Longitud</span> (obligatorio): corta, media o larga</li>
+  <li><strong>Tiene pedreria</strong> (casilla): marca si el vestido incluye pedreria</li>
+</ul>
+
+<p><strong>Campos para Traje:</strong></p>
+<ul>
+  <li><span class="obligatorio">Tipo de accesorios</span> (obligatorio): corbatin, chaleco, faja, etc.</li>
+</ul>
+
+<p><strong>Campos para Disfraz:</strong></p>
+<ul>
+  <li>No tiene campos adicionales. Se identifica por su nombre.</li>
+</ul>
+
+<p><strong>Botones:</strong></p>
+<ul>
+  <li><span class="boton">Guardar</span>: crea la prenda usando el patron Factory y la persiste</li>
+  <li><span class="boton">Limpiar</span>: vacia el formulario</li>
+</ul>
+
+<p><strong>Tabla:</strong> muestra todas las prendas con su tipo, detalle especifico y estado de disponibilidad (Si/No).</p>
+
+<hr>
+
+<h3>Servicios</h3>
+<p>Crea servicios de alquiler, consulta alquileres vigentes y devuelve servicios.</p>
+
+<p><strong>Formulario de creacion:</strong></p>
+<ul>
+  <li><strong>Cliente</strong> (lista desplegable): selecciona un cliente registrado</li>
+  <li><strong>Empleado</strong> (lista desplegable): selecciona un empleado registrado</li>
+  <li><strong>Prendas</strong> (lista de seleccion multiple): selecciona una o varias prendas disponibles. Las prendas no disponibles se marcan con <code>[NO DISPONIBLE]</code></li>
+  <li><span class="obligatorio">Fecha de alquiler</span> (obligatorio): formato <code>yyyy-MM-dd</code>, por defecto hoy</li>
+  <li><span class="obligatorio">Fecha de devolucion</span> (obligatorio): formato <code>yyyy-MM-dd</code>, por defecto hoy +5</li>
+  <li><strong>Precio total</strong>: valor numerico del alquiler</li>
+</ul>
+
+<p><strong>Botones:</strong></p>
+<ul>
+  <li><span class="boton">Crear alquiler</span>: valida que existan cliente y empleado, que las prendas esten disponibles para la fecha solicitada y crea el servicio con un numero consecutivo automatico. Las prendas se marcan como no disponibles mientras estan alquiladas.</li>
+  <li><span class="boton">Devolver servicio</span>: marca un servicio como devuelto y envia sus prendas a lavanderia. Pide la fecha de devolucion y opcionalmente los IDs de prendas que requieren prioridad especial.</li>
+  <li><span class="boton">Limpiar</span>: reinicia la seleccion del formulario</li>
+</ul>
+
+<p><strong>Consulta de alquileres vigentes:</strong></p>
+<ul>
+  <li>Ingresa el ID del cliente y presiona <span class="boton">Consultar</span></li>
+  <li>La tabla se actualiza para mostrar solo los alquileres ACTIVOS de ese cliente</li>
+</ul>
+
+<p><strong>Tabla de servicios:</strong> muestra ID, consecutivo, fechas, cliente, empleado, estado (ACTIVO/DEVUELTO), cantidad de prendas y precio.</p>
+
+<hr>
+
+<h3>Lavanderia</h3>
+<p>Gestiona las prendas devueltas que necesitan lavado, organiza tandas y marca prendas como lavadas.</p>
+
+<p><strong>Panel superior - Prendas pendientes:</strong></p>
+<ul>
+  <li>Tabla con ID, codigo, nombre, prioridad (NORMAL o PRIORITARIA) y nivel de prioridad. Las prioritarias tienen nivel 20 (decoradas), las normales nivel 1.</li>
+  <li><span class="boton">Marcar como lavada</span>: selecciona una prenda de la tabla y confirmala. La prenda se elimina de la cola de lavanderia y vuelve a estar disponible para nuevos alquileres.</li>
+</ul>
+
+<p><strong>Panel inferior - Organizar tandas:</strong></p>
+<ul>
+  <li><strong>Capacidad por tanda</strong>: numero maximo de prendas por tanda (por defecto 5)</li>
+  <li><span class="boton">Organizar tandas</span>: agrupa las prendas pendientes en tandas segun la capacidad indicada. Las prioritarias se colocan primero en cada tanda, respetando el orden de llegada dentro de cada grupo de prioridad.</li>
+  <li><span class="boton">Recargar</span>: actualiza ambas tablas</li>
+</ul>
+
+<p><strong>Tabla de tandas:</strong> muestra el numero de tanda, cantidad de prendas y capacidad. Tambien muestra el historial de tandas ya organizadas.</p>
+
+<h2>Validaciones del sistema</h2>
+<table>
+  <tr><th>Validacion</th><th>Mensaje de error</th></tr>
+  <tr><td>Documento de cliente duplicado</td><td>Ya existe un cliente con el documento X</td></tr>
+  <tr><td>Documento de empleado duplicado</td><td>Ya existe un empleado con el documento X</td></tr>
+  <tr><td>Codigo de prenda duplicado</td><td>Ya existe una prenda con el codigo X</td></tr>
+  <tr><td>Alquiler sin cliente</td><td>El cliente con id X no existe</td></tr>
+  <tr><td>Alquiler sin empleado</td><td>El empleado con id X no existe</td></tr>
+  <tr><td>Alquiler sin prendas</td><td>Debe incluir al menos una prenda</td></tr>
+  <tr><td>Prenda no disponible</td><td>La prenda X no esta disponible para la fecha Y</td></tr>
+  <tr><td>Devolver servicio ya devuelto</td><td>El servicio ya fue devuelto</td></tr>
+  <tr><td>Campos obligatorios vacios</td><td>X es obligatorio</td></tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Codigo - Los Atuendos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #fafafa;
+            color: #212121;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 30px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #C85A00;
+            border-bottom: 3px solid #E66F00;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #E66F00;
+            margin-top: 40px;
+            border-left: 4px solid #E66F00;
+            padding-left: 10px;
+        }
+
+        h3 {
+            color: #C85A00;
+            margin-top: 30px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        th {
+            background: #E66F00;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background: #FFF3E0;
+        }
+
+        code {
+            background: #FFE0B2;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #263238;
+            color: #FFD54F;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .patron {
+            background: #FFF3E0;
+            border-left: 4px solid #E66F00;
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .patron strong {
+            color: #C85A00;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 4px 0;
+        }
+
+        .estructura {
+            background: #263238;
+            color: #E0E0E0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: Consolas, monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+        }
+
+        .estructura .carpeta {
+            color: #FFB74D;
+        }
+
+        .estructura .archivo {
+            color: #81C784;
+        }
+
+        .estructura .comentario {
+            color: #90A4AE;
+        }
+
+        .fk {
+            color: #E65100;
+            font-weight: bold;
+        }
+
+        .pk {
+            color: #1565C0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Manual de Codigo - Los Atuendos</h1>
+    <p>Documentacion tecnica del aplicativo: arquitectura, patrones de diseno, base de datos y estructura de paquetes.
+    </p>
+
+    <h2>1. Estructura del proyecto</h2>
+
+    <div class="estructura">
+        <span class="carpeta">losAtuendos/</span>
+        ├── pom.xml
+        ├── <span class="archivo">MANUAL_USUARIO.html</span>
+        ├── <span class="archivo">MANUAL_CODIGO.html</span>
+        ├── src/main/
+        │ ├── <span class="archivo">1280px-Compensar_logo.svg.png</span> <span class="comentario">← Logo
+            institucional</span>
+        │ └── java/com/mycompany/losatuendos/
+        │ ├── <span class="archivo">LosAtuendos.java</span> <span class="comentario">← Punto de entrada (main)</span>
+        │ ├── <span class="carpeta">modelo/</span> <span class="comentario">← Clases de dominio</span>
+        │ │ ├── <span class="archivo">Prenda.java</span> <span class="comentario">(abstracta)</span>
+        │ │ ├── <span class="archivo">Vestido.java</span>
+        │ │ ├── <span class="archivo">Traje.java</span>
+        │ │ ├── <span class="archivo">Disfraz.java</span>
+        │ │ ├── <span class="archivo">Cliente.java</span>
+        │ │ ├── <span class="archivo">Empleado.java</span>
+        │ │ ├── <span class="archivo">ServicioAlquiler.java</span>
+        │ │ ├── <span class="archivo">TipoPrenda.java</span> <span class="comentario">(enum)</span>
+        │ │ └── <span class="archivo">EstadoAlquiler.java</span> <span class="comentario">(enum)</span>
+        │ ├── <span class="carpeta">factory/</span> <span class="comentario">← Factory Method</span>
+        │ │ └── <span class="archivo">PrendaFactory.java</span>
+        │ ├── <span class="carpeta">builder/</span> <span class="comentario">← Builder</span>
+        │ │ └── <span class="archivo">ServicioAlquilerBuilder.java</span>
+        │ ├── <span class="carpeta">composite/</span> <span class="comentario">← Composite</span>
+        │ │ ├── <span class="archivo">ComponenteAlquiler.java</span> <span class="comentario">(interfaz)</span>
+        │ │ ├── <span class="archivo">PrendaIndividual.java</span> <span class="comentario">(hoja)</span>
+        │ │ └── <span class="archivo">ConjuntoPrendas.java</span> <span class="comentario">(compuesto)</span>
+        │ ├── <span class="carpeta">decorator/</span> <span class="comentario">← Decorator</span>
+        │ │ ├── <span class="archivo">Priorizable.java</span> <span class="comentario">(interfaz)</span>
+        │ │ ├── <span class="archivo">PrioridadPrenda.java</span> <span class="comentario">(base)</span>
+        │ │ ├── <span class="archivo">PrioridadDecorator.java</span>
+        │ │ └── <span class="archivo">PrioridadLavanderia.java</span> <span class="comentario">(enum)</span>
+        │ ├── <span class="carpeta">facade/</span> <span class="comentario">← Facade</span>
+        │ │ └── <span class="archivo">FacadeAlquiler.java</span>
+        │ ├── <span class="carpeta">persistencia/</span> <span class="comentario">← Adapter + JDBC</span>
+        │ │ ├── <span class="archivo">ConexionBD.java</span>
+        │ │ ├── <span class="archivo">EsquemaBD.java</span>
+        │ │ ├── <span class="archivo">RepositorioPrendas.java</span> <span class="comentario">(interfaz)</span>
+        │ │ ├── <span class="archivo">RepositorioPrendasH2.java</span> <span class="comentario">(adaptador)</span>
+        │ │ ├── <span class="archivo">RepositorioClientes.java</span>
+        │ │ ├── <span class="archivo">RepositorioEmpleados.java</span>
+        │ │ ├── <span class="archivo">RepositorioServicios.java</span>
+        │ │ ├── <span class="archivo">RepositorioLavanderia.java</span>
+        │ │ └── <span class="archivo">TandaLavanderia.java</span>
+        │ └── <span class="carpeta">gui/</span> <span class="comentario">← Interfaz Swing</span>
+        │ ├── <span class="archivo">VentanaPrincipal.java</span>
+        │ ├── <span class="archivo">PanelClientes.java</span>
+        │ ├── <span class="archivo">PanelEmpleados.java</span>
+        │ ├── <span class="archivo">PanelPrendas.java</span>
+        │ ├── <span class="archivo">PanelServicios.java</span>
+        │ ├── <span class="archivo">PanelLavanderia.java</span>
+        │ ├── <span class="archivo">PanelRecargable.java</span> <span class="comentario">(interfaz)</span>
+        │ ├── <span class="archivo">GuiUtil.java</span>
+        │ ├── <span class="archivo">Tema.java</span>
+        │ └── <span class="archivo">BotonRedondeado.java</span>
+    </div>
+
+    <h2>2. Configuracion Maven (pom.xml)</h2>
+    <ul>
+        <li><strong>Java:</strong> source y target 11</li>
+        <li><strong>Empaquetado:</strong> JAR</li>
+        <li><strong>Clase principal:</strong> <code>com.mycompany.losatuendos.LosAtuendos</code></li>
+        <li><strong>Dependencia unica:</strong> H2 Database 2.2.224 (base de datos relacional embebida, no requiere
+            servidor externo)</li>
+    </ul>
+
+    <h2>3. Patrones de diseno</h2>
+
+    <h3>3.1 Factory Method</h3>
+    <div class="patron">
+        <p><strong>Archivo:</strong> <code>factory/PrendaFactory.java</code></p>
+        <p><strong>Problema:</strong> El sistema necesita crear tres tipos de prenda (vestido, traje, disfraz) con
+            atributos distintos. Sin el factory, el codigo cliente tendria que conocer y decidir que clase concreta
+            instanciar.</p>
+        <p><strong>Como funciona:</strong> <code>PrendaFactory.crearPrenda()</code> recibe un <code>TipoPrenda</code> y
+            delega la creacion a la clase concreta correspondiente. El resto del sistema trabaja con la abstraccion
+            <code>Prenda</code> y no conoce las clases concretas.</p>
+    </div>
+    <pre><code>PrendaFactory.crearPrenda(VESTIDO, ...)
+  └── new Vestido(...)
+PrendaFactory.crearPrenda(TRAJE, ...)
+  └── new Traje(...)
+PrendaFactory.crearPrenda(DISFRAZ, ...)
+  └── new Disfraz(...)</code></pre>
+    <p><strong>Donde se usa:</strong> <code>FacadeAlquiler.registrarPrenda()</code> llama al factory para crear la
+        prenda antes de persistirla. El panel <code>PanelPrendas</code> no sabe que clase concreta se instancia.</p>
+
+    <h3>3.2 Builder</h3>
+    <div class="patron">
+        <p><strong>Archivo:</strong> <code>builder/ServicioAlquilerBuilder.java</code></p>
+        <p><strong>Problema:</strong> Un <code>ServicioAlquiler</code> tiene muchos atributos obligatorios (fechas,
+            cliente, empleado, lista de prendas, precio). Construirlo en una sola llamada seria confuso y propenso a
+            errores.</p>
+        <p><strong>Como funciona:</strong> El builder expone metodos fluentes (<code>conCliente()</code>,
+            <code>conFechaAlquiler()</code>, <code>agregarPrenda()</code>, etc.) que acumulan los datos. Al llamar
+            <code>construir(numeroConsecutivo)</code>, valida que todos los obligatorios esten presentes y crea el
+            <code>ServicioAlquiler</code> con el composite de prendas ya armado.</p>
+    </div>
+    <pre><code>ServicioAlquilerBuilder builder = new ServicioAlquilerBuilder()
+    .conCliente(cliente)
+    .conEmpleado(empleado)
+    .conFechaAlquiler("2025-11-01")
+    .conFechaDevolucion("2025-11-05")
+    .agregarPrenda(prenda1)
+    .agregarPrenda(prenda2)
+    .conPrecioTotal(50000);
+
+ServicioAlquiler servicio = builder.construir(1);</code></pre>
+    <p><strong>Donde se usa:</strong> <code>FacadeAlquiler.crearServicioAlquiler()</code> actua como director: carga y
+        valida cliente, empleado y prendas, los pasa al builder y le inyecta el numero consecutivo.</p>
+
+    <h3>3.3 Facade</h3>
+    <div class="patron">
+        <p><strong>Archivo:</strong> <code>facade/FacadeAlquiler.java</code></p>
+        <p><strong>Problema:</strong> La interfaz grafica necesitaria interactuar con cinco repositorios, un factory, un
+            builder y un decorator para realizar las operaciones del negocio. La fachada oculta toda esa complejidad.
+        </p>
+        <p><strong>Como funciona:</strong> <code>FacadeAlquiler</code> expone metodos simples. Internamente coordina los
+            repositorios y patrones correspondientes. Todos los paneles GUI reciben la misma instancia de la fachada.
+        </p>
+    </div>
+    <table>
+        <tr>
+            <th>Operacion</th>
+            <th>Metodo</th>
+        </tr>
+        <tr>
+            <td>Registrar cliente</td>
+            <td><code>registrarCliente(Cliente c)</code></td>
+        </tr>
+        <tr>
+            <td>Listar clientes</td>
+            <td><code>listarClientes()</code></td>
+        </tr>
+        <tr>
+            <td>Registrar empleado</td>
+            <td><code>registrarEmpleado(Empleado e)</code></td>
+        </tr>
+        <tr>
+            <td>Listar empleados</td>
+            <td><code>listarEmpleados()</code></td>
+        </tr>
+        <tr>
+            <td>Registrar prenda (Factory)</td>
+            <td><code>registrarPrenda(TipoPrenda, ...)</code></td>
+        </tr>
+        <tr>
+            <td>Listar prendas</td>
+            <td><code>listarPrendas()</code></td>
+        </tr>
+        <tr>
+            <td>Verificar disponibilidad</td>
+            <td><code>prendaDisponiblePara(id, fecha)</code></td>
+        </tr>
+        <tr>
+            <td>Crear alquiler (Builder)</td>
+            <td><code>crearServicioAlquiler(...)</code></td>
+        </tr>
+        <tr>
+            <td>Listar servicios</td>
+            <td><code>listarServicios()</code></td>
+        </tr>
+        <tr>
+            <td>Alquileres vigentes por cliente</td>
+            <td><code>alquileresVigentesPorCliente(id)</code></td>
+        </tr>
+        <tr>
+            <td>Devolver servicio (Decorator)</td>
+            <td><code>devolverServicio(id, fecha, prioritarias)</code></td>
+        </tr>
+        <tr>
+            <td>Pendientes de lavanderia</td>
+            <td><code>listarPendientesLavanderia()</code></td>
+        </tr>
+        <tr>
+            <td>Organizar tandas</td>
+            <td><code>organizarTandas(capacidad)</code></td>
+        </tr>
+        <tr>
+            <td>Marcar prenda lavada</td>
+            <td><code>marcarPrendaLavada(id)</code></td>
+        </tr>
+    </table>
+
+    <h3>3.4 Composite</h3>
+    <div class="patron">
+        <p><strong>Archivos:</strong> <code>composite/ComponenteAlquiler.java</code>,
+            <code>composite/PrendaIndividual.java</code>, <code>composite/ConjuntoPrendas.java</code></p>
+        <p><strong>Problema:</strong> Un servicio de alquiler puede contener una o varias prendas. El sistema necesita
+            tratarlas de forma uniforme, sin diferenciar si es una sola prenda o un conjunto.</p>
+        <p><strong>Como funciona:</strong> <code>ComponenteAlquiler</code> es la interfaz comun.
+            <code>PrendaIndividual</code> envuelve una prenda (hoja). <code>ConjuntoPrendas</code> contiene varios
+            componentes (compuesto). Ambos implementan <code>getPrendas()</code>, <code>disponiblePara(fecha)</code> y
+            <code>resumen()</code>.</p>
+    </div>
+    <pre><code>ComponenteAlquiler
+├── PrendaIndividual  → una prenda
+└── ConjuntoPrendas   → varias PrendaIndividual</code></pre>
+    <p><strong>Donde se usa:</strong> El <code>ServicioAlquilerBuilder</code> arma el composite al construir el
+        servicio. Si hay una prenda, crea <code>PrendaIndividual</code>. Si hay varias, crea
+        <code>ConjuntoPrendas</code> y agrega cada una. <code>ServicioAlquiler.getListaPrendas()</code> delega al
+        composite para obtener la lista plana.</p>
+
+    <h3>3.5 Decorator</h3>
+    <div class="patron">
+        <p><strong>Archivos:</strong> <code>decorator/Priorizable.java</code>,
+            <code>decorator/PrioridadPrenda.java</code>, <code>decorator/PrioridadDecorator.java</code></p>
+        <p><strong>Problema:</strong> Las prendas devueltas van a lavanderia. Algunas necesitan prioridad especial sin
+            modificar la clase original <code>Prenda</code>.</p>
+        <p><strong>Como funciona:</strong> <code>PrioridadPrenda</code> envuelve una <code>Prenda</code> y le asigna
+            prioridad NORMAL por defecto (nivel 1). <code>PrioridadDecorator</code> envuelve una
+            <code>Priorizable</code> y eleva su prioridad a PRIORITARIA (nivel base + 10). La prenda original no se
+            modifica.</p>
+    </div>
+    <pre><code>Prenda → PrioridadPrenda (nivel 1, NORMAL)
+       └── PrioridadDecorator (nivel 11, PRIORITARIA)</code></pre>
+    <p><strong>Donde se usa:</strong> <code>FacadeAlquiler.listarPendientesLavanderia()</code> recupera las prendas
+        pendientes, envuelve las prioritarias con <code>PrioridadDecorator</code> y las ordena por nivel descendente. El
+        panel de lavanderia muestra el nivel en la tabla.</p>
+
+    <h3>3.6 Adapter</h3>
+    <div class="patron">
+        <p><strong>Archivos:</strong> <code>persistencia/RepositorioPrendas.java</code> (interfaz),
+            <code>persistencia/RepositorioPrendasH2.java</code> (adaptador)</p>
+        <p><strong>Problema:</strong> La logica del negocio no debe depender de una tecnologia de persistencia concreta.
+            Si se cambia de H2 a MySQL, no se debe modificar la fachada ni los modelos.</p>
+        <p><strong>Como funciona:</strong> <code>RepositorioPrendas</code> define el contrato (<code>guardar</code>,
+            <code>buscarPorId</code>, <code>listarTodas</code>, <code>disponiblePara</code>).
+            <code>RepositorioPrendasH2</code> implementa esa interfaz traduciendo las operaciones a SQL sobre H2. La
+            fachada usa la interfaz, no la implementacion concreta.</p>
+    </div>
+    <pre><code>RepositorioPrendas (interfaz del negocio)
+    ↑ implementa
+RepositorioPrendasH2 (adapta a SQL/H2)</code></pre>
+    <p><strong>Como cambiar de base de datos:</strong> Crear una nueva clase que implemente
+        <code>RepositorioPrendas</code> (por ejemplo <code>RepositorioPrendasMySQL</code>) y cambiar la instancia en la
+        fachada. El resto del sistema no se modifica.</p>
+
+    <h2>4. Base de datos</h2>
+    <p><strong>Motor:</strong> H2 embebida (archivo <code>losatuendos.mv.db</code>)<br>
+        <strong>Conexion:</strong> <code>ConexionBD.obtener()</code> devuelve una <code>Connection</code> JDBC
+    </p>
+
+    <h3>Esquema relacional</h3>
+
+    <table>
+        <tr>
+            <th>Tabla</th>
+            <th>Columnas</th>
+            <th>Claves</th>
+        </tr>
+        <tr>
+            <td><strong>clientes</strong></td>
+            <td>id, documento, nombres, apellidos, telefono, direccion</td>
+            <td><span class="pk">PK</span> id<br><span class="fk">UK</span> documento</td>
+        </tr>
+        <tr>
+            <td><strong>empleados</strong></td>
+            <td>id, documento, nombres, apellidos, cargo, telefono</td>
+            <td><span class="pk">PK</span> id<br><span class="fk">UK</span> documento</td>
+        </tr>
+        <tr>
+            <td><strong>prendas</strong></td>
+            <td>id, codigo, tipo, nombre, descripcion, disponible, longitud, tiene_pedreria, tipo_acesorios</td>
+            <td><span class="pk">PK</span> id<br><span class="fk">UK</span> codigo</td>
+        </tr>
+        <tr>
+            <td><strong>servicios_alquiler</strong></td>
+            <td>id, numero_consecutivo, fecha_alquiler, fecha_devolucion, id_cliente, id_empleado, estado, precio_total
+            </td>
+            <td><span class="pk">PK</span> id<br><span class="fk">UK</span> numero_consecutivo<br><span
+                    class="fk">FK</span> id_cliente → clientes.id<br><span class="fk">FK</span> id_empleado →
+                empleados.id</td>
+        </tr>
+        <tr>
+            <td><strong>servicio_prendas</strong></td>
+            <td>id_servicio, id_prenda</td>
+            <td><span class="pk">PK</span> (id_servicio, id_prenda)<br><span class="fk">FK</span> id_servicio →
+                servicios_alquiler.id<br><span class="fk">FK</span> id_prenda → prendas.id</td>
+        </tr>
+        <tr>
+            <td><strong>lavanderia</strong></td>
+            <td>id, id_prenda, fecha_ingreso, orden, prioridad, tanda</td>
+            <td><span class="pk">PK</span> id<br><span class="fk">FK</span> id_prenda → prendas.id</td>
+        </tr>
+        <tr>
+            <td><strong>contador_alquiler</strong></td>
+            <td>valor</td>
+            <td>Numero consecutivo de alquileres</td>
+        </tr>
+    </table>
+
+    <h3>Creacion automatica</h3>
+    <p><code>EsquemaBD.crearSiNoExiste()</code> ejecuta todos los <code>CREATE TABLE IF NOT EXISTS</code> al arrancar la
+        aplicacion. No requiere scripts manuales.</p>
+
+    <h3>Disponibilidad de prendas</h3>
+    <p>La consulta <code>disponiblePara(idPrenda, fecha)</code> verifica dos condiciones:</p>
+    <ol>
+        <li>La columna <code>disponible</code> de la prenda sea <code>TRUE</code></li>
+        <li>No exista un servicio ACTIVO que incluya esa prenda y cuya fecha solicitada este entre
+            <code>fecha_alquiler</code> y <code>fecha_devolucion</code></li>
+    </ol>
+
+    <h2>5. Interfaz grafica (Swing)</h2>
+
+    <h3>VentanaPrincipal</h3>
+    <ul>
+        <li><code>BorderLayout</code> con menu lateral (<code>WEST</code>) y area central (<code>CENTER</code>)</li>
+        <li><code>CardLayout</code> para alternar paneles sin abrir ventanas nuevas</li>
+        <li>Carga el logo desde <code>src/main/1280px-Compensar_logo.svg.png</code></li>
+        <li>Al navegar a un panel, llama <code>recargar()</code> si implementa <code>PanelRecargable</code></li>
+    </ul>
+
+    <h3>Paneles</h3>
+    <p>Cada panel extiende <code>JPanel</code> e implementa <code>PanelRecargable</code>:</p>
+    <table>
+        <tr>
+            <th>Panel</th>
+            <th>Operaciones</th>
+        </tr>
+        <tr>
+            <td>PanelClientes</td>
+            <td>Formulario + tabla de clientes</td>
+        </tr>
+        <tr>
+            <td>PanelEmpleados</td>
+            <td>Formulario + tabla de empleados</td>
+        </tr>
+        <tr>
+            <td>PanelPrendas</td>
+            <td>Formulario dinamico segun tipo + tabla</td>
+        </tr>
+        <tr>
+            <td>PanelServicios</td>
+            <td>Crear, devolver, consultar vigentes + tabla</td>
+        </tr>
+        <tr>
+            <td>PanelLavanderia</td>
+            <td>Pendientes, tandas, marcar lavada</td>
+        </tr>
+    </table>
+
+    <h3>Estilos (Tema y BotonRedondeado)</h3>
+    <ul>
+        <li><code>Tema.java</code>: define la paleta naranja/blanco y la funcion <code>textoSegunFondo()</code> que
+            elige negro o blanco segun la luminancia del fondo</li>
+        <li><code>BotonRedondeado.java</code>: pinta esquinas con <code>Graphics2D.fillRoundRect()</code> y efecto hover
+        </li>
+        <li><code>GuiUtil.java</code>: factory de componentes Swing con el tema aplicado</li>
+    </ul>
+
+    <h2>6. Flujo de una operacion completa</h2>
+    <p>Ejemplo: crear un servicio de alquiler con dos prendas.</p>
+    <pre><code>1. Usuario completa formulario en PanelServicios
+2. PanelServicios llama a facade.crearServicioAlquiler(idCliente, idEmpleado,
+   idsPrendas, fechaAlquiler, fechaDevolucion, precio)
+3. FacadeAlquiler:
+   a. Busca el cliente en RepositorioClientes (valida que exista)
+   b. Busca el empleado en RepositorioEmpleados (valida que exista)
+   c. Por cada prenda: busca en RepositorioPrendasH2 (Adapter)
+      y verifica disponibilidad con disponiblePara(id, fecha)
+   d. Pasa todo al ServicioAlquilerBuilder (Builder)
+   e. Builder.construir() valida campos obligatorios
+      y arma el ComponenteAlquiler (Composite)
+   f. RepositorioServicios.siguienteConsecutivo() obtiene el numero
+   g. RepositorioServicios.guardar() persiste encabezado + relaciones
+   h. Marca las prendas como no disponibles
+4. PanelServicios muestra mensaje de confirmacion y recarga la tabla</code></pre>
+
+    <h2>7. Manejo de errores</h2>
+    <ul>
+        <li>Las validaciones de campos lanzan <code>IllegalArgumentException</code> con el mensaje especifico, que se
+            muestra en un dialogo de error</li>
+        <li>Los errores de base de datos lanzan <code>SQLException</code> que se capturan en los paneles y se muestran
+            al usuario</li>
+        <li>El builder lanza <code>IllegalStateException</code> si faltan datos obligatorios</li>
+        <li>No se permite registrar duplicados (documento de cliente/empleado, codigo de prenda)</li>
+    </ul>
+
+    <h2>8. Decisiones de diseno documentadas</h2>
+    <table>
+        <tr>
+            <th>Decision</th>
+            <th>Justificacion</th>
+        </tr>
+        <tr>
+            <td>H2 embebida en vez de MySQL/PostgreSQL</td>
+            <td>No requiere instalar un servidor. El patron Adapter permite cambiar a otra BD creando un nuevo adaptador
+                que implemente <code>RepositorioPrendas</code>.</td>
+        </tr>
+        <tr>
+            <td>Interfaz de escritorio Swing</td>
+            <td>Cumple el requisito de interfaz grafica sin anadir dependencias externas.</td>
+        </tr>
+        <tr>
+            <td>Java 11</td>
+            <td>El sistema tiene Java 11 instalado. El pom original usaba Java 18 pero no podia ejecutarse.</td>
+        </tr>
+        <tr>
+            <td>Contador en BD</td>
+            <td>El numero consecutivo se lleva con una tabla <code>contador_alquiler</code> que se incrementa de forma
+                atomica.</td>
+        </tr>
+        <tr>
+            <td>Capacidad de tanda configurable</td>
+            <td>El documento no especificaba cuantas prendas caben por tanda. Se deja a criterio del usuario en el
+                momento de organizar.</td>
+        </tr>
+        <tr>
+            <td>Logo cargado desde archivo</td>
+            <td>El logo se lee desde <code>src/main/</code> en tiempo de ejecucion. Si no se encuentra, se omite sin
+                error.</td>
+        </tr>
+    </table>
+
+</body>
+
+</html>
