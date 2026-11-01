@@ -1,16 +1,8 @@
 package com.mycompany.losatuendos.persistencia;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Gestiona la conexion con la base de datos H2 embebida.
- *
- * Por defecto usa una base de datos en archivo llamada "losatuendos" en el
- * directorio de trabajo. Se puede cambiar la URL con la propiedad del sistema
- * "losatuendos.db.url".
- */
 public class ConexionBD {
 
     private static final String URL_POR_DEFECTO =

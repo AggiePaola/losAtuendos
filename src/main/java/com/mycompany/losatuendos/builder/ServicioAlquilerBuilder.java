@@ -57,14 +57,6 @@ public class ServicioAlquilerBuilder {
         this.precioTotal = precioTotal;
         return this;
     }
-
-    /**
-     * Construye el servicio validando los campos obligatorios.
-     *
-     * @param numeroConsecutivo numero consecutivo asignado por la fachada
-     * @return ServicioAlquiler listo para persistir
-     * @throws IllegalStateException si falta algun dato obligatorio
-     */
     public ServicioAlquiler construir(int numeroConsecutivo) {
         List<String> errores = new ArrayList<>();
 
@@ -90,7 +82,6 @@ public class ServicioAlquilerBuilder {
                             + String.join(" | ", errores));
         }
 
-        // Construir el composite de prendas
         ComponenteAlquiler componente;
         if (prendas.size() == 1) {
             componente = new PrendaIndividual(prendas.get(0));

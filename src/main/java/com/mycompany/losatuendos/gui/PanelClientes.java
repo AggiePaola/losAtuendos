@@ -1,48 +1,35 @@
 package com.mycompany.losatuendos.gui;
-
 import com.mycompany.losatuendos.facade.FacadeAlquiler;
 import com.mycompany.losatuendos.modelo.Cliente;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Panel de gestion de clientes.
- *
- * Permite registrar clientes, listarlos en una tabla y consultar sus datos.
- */
 public class PanelClientes extends JPanel implements PanelRecargable {
-
     private final FacadeAlquiler facade;
     private final JFrame ventanaPadre;
-
     private JTextField txtDocumento, txtNombres, txtApellidos, txtTelefono, txtDireccion;
     private JTable tabla;
     private DefaultTableModel modeloTabla;
-
     public PanelClientes(FacadeAlquiler facade, JFrame ventanaPadre) {
         this.facade = facade;
         this.ventanaPadre = ventanaPadre;
         initComponents();
         recargar();
     }
-
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setBackground(Tema.BLANCO);
-
-        // ---- Formulario ----
+        //Formulario
         JPanel formPanel = GuiUtil.crearPanelConBorde("Registrar cliente");
         formPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 8, 4, 8);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
         txtDocumento = GuiUtil.crearCampo(15);
         txtNombres = GuiUtil.crearCampo(20);
         txtApellidos = GuiUtil.crearCampo(20);
@@ -65,13 +52,9 @@ public class PanelClientes extends JPanel implements PanelRecargable {
         btnLimpiar.addActionListener(e -> limpiarFormulario());
         botones.add(btnGuardar);
         botones.add(btnLimpiar);
-
         gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
         formPanel.add(botones, gbc);
-
         add(formPanel, BorderLayout.NORTH);
-
-        // ---- Tabla ----
         String[] columnas = {"ID", "Documento", "Nombres", "Apellidos", "Telefono", "Direccion"};
         modeloTabla = GuiUtil.crearModeloTabla(columnas);
         tabla = new JTable(modeloTabla);
@@ -79,7 +62,6 @@ public class PanelClientes extends JPanel implements PanelRecargable {
         JScrollPane scroll = GuiUtil.crearScrollConBorde(tabla, "Clientes registrados");
         add(scroll, BorderLayout.CENTER);
     }
-
     private void agregarCampo(JPanel panel, GridBagConstraints gbc, int y,
                               String etiqueta, JComponent campo) {
         gbc.gridx = 0; gbc.gridy = y; gbc.weightx = 0;
@@ -87,7 +69,6 @@ public class PanelClientes extends JPanel implements PanelRecargable {
         gbc.gridx = 1; gbc.weightx = 1;
         panel.add(campo, gbc);
     }
-
     private void guardarCliente() {
         String documento = txtDocumento.getText().trim();
         String nombres = txtNombres.getText().trim();
@@ -99,7 +80,6 @@ public class PanelClientes extends JPanel implements PanelRecargable {
             GuiUtil.mostrarError(this, "Documento, nombres y apellidos son obligatorios.");
             return;
         }
-
         try {
             Cliente c = new Cliente(documento, nombres, apellidos, telefono, direccion);
             facade.registrarCliente(c);
@@ -112,7 +92,6 @@ public class PanelClientes extends JPanel implements PanelRecargable {
             GuiUtil.mostrarError(this, e.getMessage());
         }
     }
-
     private void limpiarFormulario() {
         txtDocumento.setText("");
         txtNombres.setText("");
@@ -121,7 +100,6 @@ public class PanelClientes extends JPanel implements PanelRecargable {
         txtDireccion.setText("");
         txtDocumento.requestFocusInWindow();
     }
-
     @Override
     public void recargar() {
         modeloTabla.setRowCount(0);

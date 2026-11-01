@@ -1,30 +1,19 @@
 package com.mycompany.losatuendos.gui;
-
 import com.mycompany.losatuendos.facade.FacadeAlquiler;
 import com.mycompany.losatuendos.modelo.Prenda;
 import com.mycompany.losatuendos.modelo.TipoPrenda;
 import com.mycompany.losatuendos.modelo.Vestido;
 import com.mycompany.losatuendos.modelo.Traje;
 import com.mycompany.losatuendos.modelo.Disfraz;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Panel de gestion de prendas.
- *
- * Usa el Factory Method (a traves de la fachada) para crear vestidos, trajes
- * y disfraces. Los campos especificos de cada tipo aparecen o se ocultan
- * segun la seleccion del combo de tipo.
- */
 public class PanelPrendas extends JPanel implements PanelRecargable {
-
     private final FacadeAlquiler facade;
     private final JFrame ventanaPadre;
-
     private JTextField txtCodigo, txtNombre, txtDescripcion, txtLongitud, txtAccesorios;
     private JCheckBox chkPedreria;
     private JLabel lblLongitud, lblPedreria, lblAccesorios;
@@ -38,13 +27,11 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
         initComponents();
         recargar();
     }
-
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setBackground(Tema.BLANCO);
-
-        // ---- Formulario ----
+        //Formulario
         JPanel formPanel = GuiUtil.crearPanelConBorde("Registrar prenda");
         formPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -54,7 +41,6 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
 
         comboTipo = GuiUtil.crearCombo(TipoPrenda.values());
         comboTipo.addActionListener(e -> actualizarVisibilidadCampos());
-
         txtCodigo = GuiUtil.crearCampo(15);
         txtNombre = GuiUtil.crearCampo(20);
         txtDescripcion = GuiUtil.crearCampo(25);
@@ -63,7 +49,6 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
         chkPedreria = new JCheckBox();
         chkPedreria.setBackground(Tema.BLANCO);
         chkPedreria.setForeground(Tema.TEXTO_OSCURO);
-
         lblLongitud = GuiUtil.crearEtiqueta("Longitud (corta/media/larga):");
         lblPedreria = GuiUtil.crearEtiqueta("Tiene pedreria:");
         lblAccesorios = GuiUtil.crearEtiqueta("Tipo de accesorios:");
@@ -80,19 +65,16 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
         gbc.gridx = 1; gbc.weightx = 1;
         formPanel.add(txtLongitud, gbc);
         y++;
-
         gbc.gridx = 0; gbc.gridy = y; gbc.weightx = 0;
         formPanel.add(lblPedreria, gbc);
         gbc.gridx = 1; gbc.weightx = 1;
         formPanel.add(chkPedreria, gbc);
         y++;
-
         gbc.gridx = 0; gbc.gridy = y; gbc.weightx = 0;
         formPanel.add(lblAccesorios, gbc);
         gbc.gridx = 1; gbc.weightx = 1;
         formPanel.add(txtAccesorios, gbc);
         y++;
-
         // Botones
         JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 5));
         botones.setOpaque(false);
@@ -102,42 +84,31 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
         btnLimpiar.addActionListener(e -> limpiarFormulario());
         botones.add(btnGuardar);
         botones.add(btnLimpiar);
-
         gbc.gridx = 0; gbc.gridy = y; gbc.gridwidth = 2;
         formPanel.add(botones, gbc);
-
         add(formPanel, BorderLayout.NORTH);
-
-        // ---- Tabla ----
+      
         String[] columnas = {"ID", "Codigo", "Tipo", "Nombre", "Detalle", "Disponible"};
         modeloTabla = GuiUtil.crearModeloTabla(columnas);
         tabla = new JTable(modeloTabla);
         GuiUtil.configurarTabla(tabla);
         JScrollPane scroll = GuiUtil.crearScrollConBorde(tabla, "Prendas registradas");
         add(scroll, BorderLayout.CENTER);
-
         actualizarVisibilidadCampos();
     }
-
-    /**
-     * Muestra u oculta los campos especificos segun el tipo seleccionado.
-     */
     private void actualizarVisibilidadCampos() {
         TipoPrenda tipo = (TipoPrenda) comboTipo.getSelectedItem();
         boolean esVestido = tipo == TipoPrenda.VESTIDO;
         boolean esTraje = tipo == TipoPrenda.TRAJE;
-
         lblLongitud.setVisible(esVestido);
         txtLongitud.setVisible(esVestido);
         lblPedreria.setVisible(esVestido);
         chkPedreria.setVisible(esVestido);
         lblAccesorios.setVisible(esTraje);
         txtAccesorios.setVisible(esTraje);
-
         revalidate();
         repaint();
     }
-
     private void agregarCampo(JPanel panel, GridBagConstraints gbc, int y,
                               String etiqueta, JComponent campo) {
         gbc.gridx = 0; gbc.gridy = y; gbc.weightx = 0;
@@ -145,21 +116,17 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
         gbc.gridx = 1; gbc.weightx = 1;
         panel.add(campo, gbc);
     }
-
     private void guardarPrenda() {
         TipoPrenda tipo = (TipoPrenda) comboTipo.getSelectedItem();
         String codigo = txtCodigo.getText().trim();
         String nombre = txtNombre.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
-
         if (codigo.isEmpty() || nombre.isEmpty()) {
             GuiUtil.mostrarError(this, "Codigo y nombre son obligatorios.");
             return;
         }
-
         String atributoExtra = null;
         boolean atributoBool = false;
-
         if (tipo == TipoPrenda.VESTIDO) {
             atributoExtra = txtLongitud.getText().trim();
             if (atributoExtra.isEmpty()) {
@@ -174,7 +141,6 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
                 return;
             }
         }
-
         try {
             Prenda p = facade.registrarPrenda(tipo, codigo, nombre, descripcion,
                     atributoExtra, atributoBool);
@@ -187,7 +153,6 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
             GuiUtil.mostrarError(this, e.getMessage());
         }
     }
-
     private void limpiarFormulario() {
         txtCodigo.setText("");
         txtNombre.setText("");
@@ -198,7 +163,6 @@ public class PanelPrendas extends JPanel implements PanelRecargable {
         comboTipo.setSelectedIndex(0);
         txtCodigo.requestFocusInWindow();
     }
-
     @Override
     public void recargar() {
         modeloTabla.setRowCount(0);

@@ -1,27 +1,17 @@
 package com.mycompany.losatuendos.gui;
-
 import com.mycompany.losatuendos.decorator.Priorizable;
 import com.mycompany.losatuendos.facade.FacadeAlquiler;
 import com.mycompany.losatuendos.persistencia.TandaLavanderia;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Panel de gestion de lavanderia.
- *
- * Muestra las prendas pendientes de lavado (con su prioridad aplicada via
- * Decorator), permite organizar tandas con una capacidad definida por el
- * usuario y marcar prendas como lavadas.
- */
 public class PanelLavanderia extends JPanel implements PanelRecargable {
 
     private final FacadeAlquiler facade;
     private final JFrame ventanaPadre;
-
     private JTable tablaPendientes;
     private DefaultTableModel modeloPendientes;
     private JTable tablaTandas;
@@ -34,16 +24,12 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
         initComponents();
         recargar();
     }
-
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setBackground(Tema.BLANCO);
-
-        // ---- Panel de pendientes ----
         JPanel panelPendientes = GuiUtil.crearPanelConBorde("Prendas pendientes de lavanderia");
         panelPendientes.setLayout(new BorderLayout(5, 5));
-
         String[] colPendientes = {"ID", "Codigo", "Nombre", "Prioridad", "Nivel"};
         modeloPendientes = GuiUtil.crearModeloTabla(colPendientes);
         tablaPendientes = new JTable(modeloPendientes);
@@ -59,11 +45,9 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
         btnMarcarLavada.addActionListener(e -> marcarLavada());
         botonesPendientes.add(btnMarcarLavada);
         panelPendientes.add(botonesPendientes, BorderLayout.SOUTH);
-
-        // ---- Panel de tandas ----
+        //Panel de tandas 
         JPanel panelTandas = GuiUtil.crearPanelConBorde("Organizar tandas");
         panelTandas.setLayout(new BorderLayout(5, 5));
-
         JPanel controlesTanda = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 5));
         controlesTanda.setOpaque(false);
         controlesTanda.add(GuiUtil.crearEtiqueta("Capacidad por tanda:"));
@@ -77,7 +61,6 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
         btnRecargar.addActionListener(e -> recargar());
         controlesTanda.add(btnRecargar);
         panelTandas.add(controlesTanda, BorderLayout.NORTH);
-
         String[] colTandas = {"Tanda", "Prendas", "Capacidad"};
         modeloTandas = GuiUtil.crearModeloTabla(colTandas);
         tablaTandas = new JTable(modeloTandas);
@@ -85,18 +68,13 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
         JScrollPane scrollTandas = new JScrollPane(tablaTandas);
         scrollTandas.setPreferredSize(new Dimension(300, 150));
         panelTandas.add(scrollTandas, BorderLayout.CENTER);
-
-        // ---- Distribucion ----
+        //Distribucion
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 panelPendientes, panelTandas);
         split.setDividerLocation(250);
         split.setBackground(Tema.BLANCO);
         add(split, BorderLayout.CENTER);
     }
-
-    /**
-     * Marca la prenda seleccionada como lavada.
-     */
     private void marcarLavada() {
         int fila = tablaPendientes.getSelectedRow();
         if (fila < 0) {
@@ -109,7 +87,6 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
         if (!GuiUtil.confirmar(this, "Confirmar que la prenda " + idPrenda + " fue lavada?")) {
             return;
         }
-
         try {
             facade.marcarPrendaLavada(idPrenda);
             GuiUtil.mostrarInfo(this, "Prenda lavada y disponible nuevamente.");
@@ -118,10 +95,6 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
             GuiUtil.mostrarError(this, "Error: " + e.getMessage());
         }
     }
-
-    /**
-     * Organiza las prendas pendientes en tandas.
-     */
     private void organizarTandas() {
         int capacidad;
         try {
@@ -134,7 +107,6 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
             GuiUtil.mostrarError(this, "La capacidad debe ser un numero entero.");
             return;
         }
-
         try {
             List<TandaLavanderia> tandas = facade.organizarTandas(capacidad);
             modeloTandas.setRowCount(0);
@@ -153,7 +125,6 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
             GuiUtil.mostrarError(this, "Error: " + e.getMessage());
         }
     }
-
     @Override
     public void recargar() {
         // Pendientes
@@ -169,8 +140,7 @@ public class PanelLavanderia extends JPanel implements PanelRecargable {
         } catch (SQLException e) {
             GuiUtil.mostrarError(this, "Error al cargar pendientes: " + e.getMessage());
         }
-
-        // Historial de tandas
+        // Historial
         modeloTandas.setRowCount(0);
         try {
             for (TandaLavanderia t : facade.historialTandas()) {

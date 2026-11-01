@@ -6,8 +6,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-/**
- * Utilidades de interfaz grafica con la paleta institucional naranja/blanco.
+/* Utilidades de interfaz grafica con la paleta institucional naranja/blanco.
  */
 public final class GuiUtil {
 
@@ -23,35 +22,24 @@ public final class GuiUtil {
                 BorderFactory.createEmptyBorder(3, 6, 3, 6)));
         return field;
     }
-
-    /** Crea una etiqueta de campo. */
     public static JLabel crearEtiqueta(String texto) {
         JLabel label = new JLabel(texto);
         label.setFont(new Font("SansSerif", Font.PLAIN, 13));
         label.setForeground(Tema.TEXTO_OSCURO);
         return label;
     }
-
-    /** Crea un boton redondeado naranja (accion principal). */
     public static JButton crearBotonPrincipal(String texto) {
         return new BotonRedondeado(texto, Tema.NARANJA_PRINCIPAL, 14);
     }
-
-    /** Crea un boton redondeado gris (cancelar / secundario). */
     public static JButton crearBotonCancelar(String texto) {
         return new BotonRedondeado(texto, new Color(130, 130, 130), 14);
     }
-
-    /** Crea un boton redondeado rojo (peligro / eliminar). */
     public static JButton crearBotonPeligro(String texto) {
         return new BotonRedondeado(texto, new Color(200, 60, 60), 14);
     }
-
-    /** Crea un boton redondeado con color personalizado. */
     public static JButton crearBoton(String texto, Color color) {
         return new BotonRedondeado(texto, color, 14);
     }
-
     public static JPanel crearPanelConBorde(String titulo) {
         JPanel panel = new JPanel();
         panel.setBackground(Tema.BLANCO);
@@ -94,7 +82,6 @@ public final class GuiUtil {
             tabla.getColumnModel().getColumn(i).setCellRenderer(centro);
         }
     }
-
     public static JScrollPane crearScrollConBorde(JTable tabla, String titulo) {
         JScrollPane scroll = new JScrollPane(tabla);
         scroll.setBackground(Tema.BLANCO);

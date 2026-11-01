@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Patron Composite - hoja.
+ * Patron Composite
  *
  * Envuelve una prenda individual para que pueda usarse dentro de un
  * ComponenteAlquiler compuesto.
